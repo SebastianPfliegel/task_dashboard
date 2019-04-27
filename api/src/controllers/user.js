@@ -26,8 +26,8 @@ const SignUp = (req, res, next) => {
                 newUser.Password = hash;
                 User
                     .create(newUser)
-                    .then(x => {
-                        return res.status(200).json(x);
+                    .then(user => {
+                        return res.status(200).json(user);
                     })
                     .catch(err => {
                         const error = new Error('Communication with database failed');
@@ -51,14 +51,14 @@ const Login = (req, res, next) => {
 
     User
         .findOne({ where: { EMail: login.EMail } })
-        .then(x => {
-            if (x === null) {
+        .then(user => {
+            if (user === null) {
                 const error = new Error('Login failed');
                 error.status = 401;
                 return next(error);
             }
 
-            bcrypt.compare(login.Password, x.Password, (err, result) => {
+            bcrypt.compare(login.Password, user.Password, (err, result) => {
                 if (err) {
                     const error = new Error('Login failed');
                     error.status = 401;
@@ -68,8 +68,8 @@ const Login = (req, res, next) => {
                 if (result) {
                     const token = jwt.sign(
                         {
-                            EMail: x.EMail,
-                            Id: x.Id
+                            EMail: user.EMail,
+                            Id: user.Id
                         },
                         '',
                         {
