@@ -13,9 +13,9 @@ app.use('/user', userRoutes);
 app.use('/tasks', taskRoutes);
 
 app.use((req, res, next) => {
-    const err = new Error('Not found');
-    err.status = 404;
-    next(err);
+    const error = new Error('Not Found');
+    error.status = 404;
+    next(error);
 });
 
 app.use((err, req, res, next) => {
@@ -23,8 +23,10 @@ app.use((err, req, res, next) => {
     res
         .status(status)
         .json({
-            status,
-            message: err.message
+            error: {
+                status: status,
+                message: err.message
+            }
         });
 });
 

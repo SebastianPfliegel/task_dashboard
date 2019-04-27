@@ -7,7 +7,8 @@ export default (req, res, next) => {
         req.userData = decoded;
         next();
     } catch (err) {
-        err.status = 401;
-        return next(err);
+        const error = new Error('Unauthorized');
+        error.status = 401;
+        return next(error);
     }
 };

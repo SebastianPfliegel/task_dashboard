@@ -11,15 +11,16 @@ const SignUp = (req, res, next) => {
         .findOne({ where: { EMail: newUser.EMail } })
         .then(existingUser => {
             if (existingUser) {
-                const err = new Error('xxx');
-                err.status = 400;
-                return next(err);
+                const error = new Error('SignUp failed');
+                error.status = 400;
+                return next(error);
             }
 
             bcrypt.hash(newUser.Password, 10, (err, hash) => {
                 if (err) {
-                    err.status = 500;
-                    return next(err);
+                    const error = new Error('SignUp failed');
+                    error.status = 400;
+                    return next(error);
                 }
 
                 newUser.Password = hash;
@@ -29,14 +30,16 @@ const SignUp = (req, res, next) => {
                         return res.status(200).json(x);
                     })
                     .catch(err => {
-                        err.status = 500;
-                        return next(err);
+                        const error = new Error('Communication with database failed');
+                        error.status = 500;
+                        return next(error);
                     });
             });
         })
         .catch(err => {
-            err.status = 500;
-            return next(err);
+            const error = new Error('Communication with database failed');
+            error.status = 500;
+            return next(error);
         });
 };
 
@@ -50,15 +53,16 @@ const Login = (req, res, next) => {
         .findOne({ where: { EMail: login.EMail } })
         .then(x => {
             if (x === null) {
-                const err = new Error('x');
-                err.status = 500;
-                return next(err);
+                const error = new Error('Login failed');
+                error.status = 401;
+                return next(error);
             }
 
             bcrypt.compare(login.Password, x.Password, (err, result) => {
                 if (err) {
-                    err.status = 500;
-                    return next(err);
+                    const error = new Error('Login failed');
+                    error.status = 401;
+                    return next(error);
                 }
 
                 if (result) {
@@ -76,14 +80,15 @@ const Login = (req, res, next) => {
                     return res.status(200).json(token);
                 }
 
-                const error = new Error('xx');
-                error.status = 500;
+                const error = new Error('Login failed');
+                error.status = 401;
                 return next(error);
             });
         })
         .catch(err => {
-            err.status = 500;
-            return next(err);
+            const error = new Error('Communication with database failed');
+            error.status = 500;
+            return next(error);
         });
 };
 

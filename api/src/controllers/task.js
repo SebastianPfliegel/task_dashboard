@@ -5,12 +5,13 @@ const GetAllUserTasks = (req, res, next) => {
 
     Task
         .findAll({ where: { User: user } })
-        .then(x => {
-            return res.status(200).json(x);
+        .then(allTasks => {
+            return res.status(200).json(allTasks);
         })
         .catch(err => {
-            err.status = 500;
-            return next(err);
+            const error = new Error('Communication with database failed');
+            error.status = 500;
+            return next(error);
         });
 };
 
@@ -20,24 +21,25 @@ const GetUserTask = (req, res, next) => {
 
     Task
         .findOne({ where: { Id: task } })
-        .then(x => {
-            if (x === null) {
-                const err = new Error('not existing');
-                err.status = 400;
-                return next(err);
+        .then(task => {
+            if (task === null) {
+                const error = new Error('Task does not exist');
+                error.status = 404;
+                return next(error);
             }
 
-            if (x.User != user) {
-                const err = new Error('auth');
-                err.status = 401;
-                return next(err);
+            if (task.User != user) {
+                const error = new Error('Permission denied for this task');
+                error.status = 403;
+                return next(error);
             }
 
-            return res.status(200).json(x);
+            return res.status(200).json(task);
         })
         .catch(err => {
-            err.status = 500;
-            return next(err);
+            const error = new Error('Communication with database failed');
+            error.status = 500;
+            return next(error);
         });
 };
 
@@ -49,12 +51,13 @@ const CreateTask = (req, res, next) => {
 
     Task
         .create(newTask)
-        .then(x => {
-            return res.status(200).json(x);
+        .then(task => {
+            return res.status(200).json(task);
         })
         .catch(err => {
-            err.status = 500;
-            return next(err);
+            const error = new Error('Communication with database failed');
+            error.status = 500;
+            return next(error);
         });
 };
 
