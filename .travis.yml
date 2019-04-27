@@ -1,0 +1,8 @@
+matrix:
+  include:
+    - language: node_js
+      install:
+        - npm --prefix ./api install
+      script:
+        - npm --prefix ./api run lint
+        - npm --prefix ./api run build
