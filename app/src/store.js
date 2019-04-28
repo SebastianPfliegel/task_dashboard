@@ -1,9 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import axios from 'axios';
+import axios from './axios';
 import router from './router';
-
-axios.defaults.baseURL = 'http://localhost:3000';
 
 Vue.use(Vuex);
 
