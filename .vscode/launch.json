@@ -23,6 +23,25 @@
             "request": "attach",
             "name": "Api: Attach",
             "port": 5858
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "App: Chrome",
+            "url": "http://localhost:8080",
+            "webRoot": "${workspaceFolder}/app/src",
+            "breakOnLoad": true,
+            "sourceMapPathOverrides": {
+                "webpack:///./src/*": "${webRoot}/*"
+            }
+        },
+        {
+            "type": "firefox",
+            "request": "launch",
+            "name": "App: Firefox",
+            "url": "http://localhost:8080",
+            "webRoot": "${workspaceFolder}/app/src",
+            "pathMappings": [{ "url": "webpack:///src/", "path": "${webRoot}/" }]
         }
     ]
 }
