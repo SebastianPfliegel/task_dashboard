@@ -32,14 +32,14 @@ export default {
         return {
             email: '',
             password: ''
-        }
+        };
     },
     methods: {
         onSubmit: () => {
             
         }
     }
-}
+};
 </script>
 
 <style scoped>

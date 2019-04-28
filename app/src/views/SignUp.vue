@@ -41,14 +41,14 @@ export default {
             email: '',
             password: '',
             confirmPassword: ''
-        }
+        };
     },
     methods: {
         onSubmit: () => {
             
         }
     }
-}
+};
 </script>
 
 <style scoped>
