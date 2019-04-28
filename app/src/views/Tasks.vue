@@ -1,9 +1,6 @@
 <template>
     <div>
         <div>
-            <app-task v-for="(task, idx) in tasks" :key="idx" @click.native="deleteTask(idx)">{{ task.Description }}</app-task>
-        </div>
-        <div>
             <label for="task">New task</label>
             <input
                 type="text"
@@ -11,6 +8,9 @@
                 v-model="task"
             >
             <button @click="addTask">Add</button>
+        </div>
+        <div class="row">
+            <app-task v-for="(task, idx) in tasks" :key="idx" @click.native="deleteTask(idx)">{{ task.Description }}</app-task>
         </div>
     </div>
 </template>
@@ -33,6 +33,7 @@ export default {
         addTask() {
             if (this.task !== '') {
                 this.$store.dispatch('createTask', this.task);
+                this.task = '';
             }
         },
         deleteTask(index) {
