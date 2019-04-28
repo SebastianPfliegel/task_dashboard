@@ -12,7 +12,14 @@ export default new Router({
         {
             path: '/',
             name: 'home',
-            component: Home
+            component: Home,
+            beforeEnter(to, from, next) {
+                if (!store.getters.isAuthenticated) {
+                    next();
+                } else {
+                    next(false);
+                }
+            }
         },
         {
             path: '/signup',

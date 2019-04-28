@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
+import router from './router';
 
 axios.defaults.baseURL = 'http://localhost:3000';
 
@@ -20,6 +21,12 @@ export default new Vuex.Store({
         },
         addTask: (state, task) => {
             state.tasks.push(task);
+        },
+        removeTask: (state, task) => {
+            state.tasks.splice(task, 1);
+        },
+        clearAuth: (state) => {
+            state.token = null;
         }
     },
     actions: {
@@ -28,16 +35,21 @@ export default new Vuex.Store({
                 .post('/user/login', credentials)
                 .then(res => {
                     commit('setToken', res.data);
+                    router.replace('/tasks');
                 })
                 .catch(err => {
                     
                 });
         },
+        logout: ({ commit }) => {
+            commit('clearAuth');
+            router.replace('/');
+        },
         signup: ({ state }, credentials) => {
             axios
                 .post('/user/signup', credentials)
                 .then(res => {
-
+                    router.replace('/signin');
                 })
                 .catch(err => {
 
@@ -66,6 +78,21 @@ export default new Vuex.Store({
                 })
                 .then(res => {
                     commit('addTask', res.data);
+                })
+                .catch(err => {
+
+                });
+        },
+        deleteTask: ({ commit, getters }, index) => {
+            const taskId = getters.getTasks[index].Id;
+            axios
+                .delete('/tasks/' + taskId, {
+                    headers: {
+                        'Authorization': 'Bearer ' + getters.getToken
+                    }
+                })
+                .then(res => {
+                    commit('removeTask', index);
                 })
                 .catch(err => {
 

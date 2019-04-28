@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div v-for="task in tasks" :key="task.Id">
-            <p>{{ task.Id }} - {{ task.Description }}</p>
+        <div>
+            <app-task v-for="(task, idx) in tasks" :key="idx" @click.native="deleteTask(idx)">{{ task.Description }}</app-task>
         </div>
         <div>
             <label for="task">New task</label>
@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import Task from '../components/Task';
+
 export default {
     data: () => {
         return {
@@ -32,10 +34,16 @@ export default {
             if (this.task !== '') {
                 this.$store.dispatch('createTask', this.task);
             }
+        },
+        deleteTask(index) {
+            this.$store.dispatch('deleteTask', index);
         }
     },
     mounted() {
         this.$store.dispatch('fetchTasks');
+    },
+    components: {
+        'app-task': Task
     }
 };
 </script>
