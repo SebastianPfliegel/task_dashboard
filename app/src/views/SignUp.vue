@@ -44,8 +44,16 @@ export default {
         };
     },
     methods: {
-        onSubmit: () => {
-            
+        onSubmit() {
+            console.log('onSubmit');
+            if (this.password === this.confirmPassword) {
+                this.$store.dispatch('signup', {
+                    EMail: this.email,
+                    Password: this.password
+                });
+            } else {
+
+            }
         }
     }
 };

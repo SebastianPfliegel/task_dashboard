@@ -35,8 +35,11 @@ export default {
         };
     },
     methods: {
-        onSubmit: () => {
-            
+        onSubmit() {
+            this.$store.dispatch('login', {
+                EMail: this.email,
+                Password: this.password
+            });
         }
     }
 };
