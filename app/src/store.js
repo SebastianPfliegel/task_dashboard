@@ -78,6 +78,9 @@ export default new Vuex.Store({
         },
         getTasks: (state) => {
             return state.tasks;
+        },
+        isAuthenticated: (state) => {
+            return state.token !== null;
         }
     }
 });
