@@ -16,11 +16,11 @@ const GetAllUserTasks = (req, res, next) => {
 };
 
 const GetUserTask = (req, res, next) => {
-    const user = req.userData.Id;
-    const task = req.params.taskId;
+    const userId = req.userData.Id;
+    const taskId = req.params.taskId;
 
     Task
-        .findOne({ where: { Id: task } })
+        .findOne({ where: { Id: taskId } })
         .then(task => {
             if (task === null) {
                 const error = new Error('Task does not exist');
@@ -28,7 +28,7 @@ const GetUserTask = (req, res, next) => {
                 return next(error);
             }
 
-            if (task.User != user) {
+            if (task.User != userId) {
                 const error = new Error('Permission denied for this task');
                 error.status = 403;
                 return next(error);
@@ -61,4 +61,42 @@ const CreateTask = (req, res, next) => {
         });
 };
 
-export { GetAllUserTasks, GetUserTask, CreateTask };
+const DeleteTask = (req, res, next) => {
+    const userId = req.userData.Id;
+    const taskId = req.params.taskId;
+
+    Task
+        .findOne({ where: { Id: taskId }})
+        .then(task => {
+            if (task === null) {
+                const error = new Error('Task does not exist');
+                error.status = 404;
+                return next(error);
+            }
+
+            if (task.User != userId) {
+                const error = new Error('Permission denied for this task');
+                error.status = 403;
+                return next(error);
+            }
+
+            Task
+                .destroy({ where: { Id: taskId }})
+                .then(() => {
+                    return res.status(200).json(task);
+                })
+                .catch(err => {
+                    const error = new Error('Communication with database failed');
+                    error.status = 500;
+                    return next(error);
+                });
+
+        })
+        .catch(err => {
+            const error = new Error('Communication with database failed');
+            error.status = 500;
+            return next(error);
+        });
+};
+
+export { GetAllUserTasks, GetUserTask, CreateTask, DeleteTask };

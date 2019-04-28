@@ -51,8 +51,6 @@ export default {
                     EMail: this.email,
                     Password: this.password
                 });
-            } else {
-
             }
         }
     }
