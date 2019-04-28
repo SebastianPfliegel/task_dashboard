@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { User } from '../db';
+import config from '../config';
 
 const SignUp = (req, res, next) => {
     const newUser = {
@@ -71,7 +72,7 @@ const Login = (req, res, next) => {
                             EMail: user.EMail,
                             Id: user.Id
                         },
-                        '',
+                        config.api.secret,
                         {
                             expiresIn: '1h'
                         }
